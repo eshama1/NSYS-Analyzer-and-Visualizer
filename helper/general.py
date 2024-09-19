@@ -192,7 +192,7 @@ def convert_size(size_bytes):
     i = int(np.floor(np.log10(size_bytes) / 3))
     p = np.power(10, i * 3)
     s = round(size_bytes / p, 2)
-    return f"{s} {size_name[i]}"
+    return f"{s}{size_name[i]}"
 
 def convert_duration(duration):
     if duration == 0:
@@ -258,10 +258,10 @@ def create_histogram(data, bins=10, powers_2=False, base=False, convert_bytes=Fa
             bin_centers = (bin_edges[1:] + bin_edges[:-1]) / 2
 
             if convert_bytes:
-                bin_labels = [f'{convert_size(left)} to {convert_size(right)}' for left, right in
+                bin_labels = [f'{convert_size(left)}-{convert_size(right)}' for left, right in
                               zip(bin_edges[:-1], bin_edges[1:])]
             else:
-                bin_labels = [f'{convert_duration(left)} to {convert_duration(right)}' for left, right in zip(bin_edges[:-1], bin_edges[1:])]
+                bin_labels = [f'{convert_duration(left)}-{convert_duration(right)}' for left, right in zip(bin_edges[:-1], bin_edges[1:])]
 
             if not isinstance(bin_centers, list):
                 bin_centers = bin_centers.tolist()

@@ -8,8 +8,11 @@ from sklearn.cluster import KMeans
 from helper.general import convert_size, convert_duration
 
 plt.rcParams.update({
-    'font.size': 14,
-    'axes.titlesize': 16,
+    'font.size': 16,           # Default font size for all text
+    'axes.titlesize': 16,      # Title font size
+    'axes.labelsize': 16,      # Axis label font size
+    'xtick.labelsize': 16,     # X-axis tick label font size
+    'ytick.labelsize': 16,     # Y-axis tick label font size
 })
 
 
@@ -54,7 +57,7 @@ def create_and_plot_k_mean_statistics(cluster_data, title, parent_dir):
         wcss_values.append ( kmeans.inertia_ )
 
     # Plot the WCSS values
-    fig, ax = plt.subplots ( figsize=(10, 10) )
+    fig, ax = plt.subplots ( figsize=(10, 8) )
     ax.plot ( range ( 1, max_clusters + 1 ), wcss_values, marker='o' )
     ax.set_title ( 'Elbow Method for Optimal k' )
     ax.set_xlabel ( 'Number of clusters (k)' )
@@ -75,7 +78,7 @@ def create_and_plot_k_mean_statistics(cluster_data, title, parent_dir):
         min_y = np.min(X[:, 1])
         min_x_log10 = np.floor(np.log10(min_x))
         min_y_log10 = np.floor(np.log10(min_y))
-        fig, ax = plt.subplots ( 1, figsize=(10, 10) )
+        fig, ax = plt.subplots ( 1, figsize=(10, 8) )
         ax.scatter ( X[:, 0], X[:, 1], c=cluster_labels, cmap='tab10', s=50, alpha=0.5 )
         ax.set_title ( 'Execution Duration K-means Clustering' )
         ax.set_xlabel ( 'Mean Execution Duration' )
@@ -118,7 +121,7 @@ def plot_combined_data(combined_data, title, metric, parent_dir, raw_provided=Fa
         logging.error ( f'\"{title}: Combined {metric}\" - Only 1 Raw Data found, No figure generated' )
         return None
 
-    fig, ax = plt.subplots ( 1, figsize=(10, 10) )
+    fig, ax = plt.subplots ( 1, figsize=(10, 8) )
     parts = ax.violinplot ( data, showmeans=True, showmedians=True )
 
     for pc in parts['bodies']:
@@ -136,7 +139,7 @@ def plot_combined_data(combined_data, title, metric, parent_dir, raw_provided=Fa
 
     ax.xaxis.set_ticks ( range ( 1, len ( labels ) + 1 ) )
     ax.xaxis.set_ticklabels ( labels )
-    ax.tick_params ( axis='x', rotation=45 )
+    ax.tick_params ( axis='x', rotation=25 )
     ax.set_xlabel ( "Trace Name" )
 
     flat_data = [item for sublist in data for item in sublist]
@@ -175,7 +178,7 @@ def plot_combined_overall_bandwidth_distribution(combined_data, title, parent_di
             temp.append (bandwidth)
         data.append ( temp )
 
-    fig, ax = plt.subplots ( 1, figsize=(10, 10) )
+    fig, ax = plt.subplots ( 1, figsize=(10, 8) )
     parts = ax.violinplot ( data, showmeans=True, showmedians=True )
 
     for pc in parts['bodies']:
@@ -197,7 +200,7 @@ def plot_combined_overall_bandwidth_distribution(combined_data, title, parent_di
     ax.set_title ( f'{title}: Overall Combined Bandwidth Distribution' )
     ax.xaxis.set_ticks ( range ( 1, len ( labels ) + 1 ) )
     ax.xaxis.set_ticklabels ( labels )
-    ax.tick_params ( axis='x', rotation=45 )
+    ax.tick_params ( axis='x', rotation=25 )
     ax.set_xlabel ( "Trace Name" )
     ax.set_yscale ( 'log', base=10 )
     ax.yaxis.set_major_formatter ( ticker.FuncFormatter ( format_power_10_ticks ) )
@@ -263,9 +266,9 @@ def plot_binned_bandwidth_distribution(combined_data, title, parent_dir):
     ax.grid(which='minor', axis='y', linestyle=':', linewidth=0.5, color='lightgray')
     ax.set_title(f'{title}: Bandwidth Distribution by Transfer Size')
     ax.set_xticks(x + 0.5 * (num_configs - 1))
-    bin_labels = [f'{convert_size ( left )} to {convert_size ( right )}' for left, right in
+    bin_labels = [f'{convert_size ( left )}-{convert_size ( right )}' for left, right in
                   zip ( bin_edges[:-1], bin_edges[1:] )]
-    ax.set_xticklabels(bin_labels, rotation=45, ha='right')
+    ax.set_xticklabels(bin_labels, rotation=25, ha='right')
     ax.set_xlabel("Data Transfer Size")
     ax.set_yscale('log')
     ax.yaxis.set_major_formatter(ticker.FuncFormatter(format_power_10_ticks))
@@ -283,7 +286,7 @@ def plot_bandwidth_distribution(histogram_data, title, parent_dir):
     labels = histogram_data['Bin Labels']
 
     x_values = np.arange ( 1, len ( array_lists ) + 1 )
-    fig, ax = plt.subplots ( 1, figsize=(10, 10) )
+    fig, ax = plt.subplots ( 1, figsize=(10, 8) )
     parts = ax.violinplot ( array_lists, showmeans=True, showmedians=True )
 
     for pc in parts['bodies']:
@@ -301,7 +304,7 @@ def plot_bandwidth_distribution(histogram_data, title, parent_dir):
 
     ax.xaxis.set_ticks ( x_values )
     ax.xaxis.set_ticklabels ( labels )
-    ax.tick_params ( axis='x', rotation=45 )
+    ax.tick_params ( axis='x', rotation=25 )
     min_value = min ( min ( sublist ) for sublist in array_lists )
     ax.grid ( axis='y', linestyle='--', linewidth=0.5, color='gray', alpha=0.5 )
     ax.grid(which='minor', axis='y', linestyle=':', linewidth=0.5, color='lightgray')
@@ -326,13 +329,13 @@ def plot_frequency_distribution(histogram_data, title, xlabel, parent_dir):
     bin_array = histogram_data['Histogram']
     labels = histogram_data['Bin Labels']
 
-    fig, ax = plt.subplots ( 1, figsize=(10, 10) )
+    fig, ax = plt.subplots ( 1, figsize=(10, 8) )
     ax.bar ( range ( 1, len ( bin_array ) + 1 ), bin_array, width=1, edgecolor='black' )
 
     x_values = np.arange ( 1, len ( bin_array ) + 1 )
     ax.xaxis.set_ticks ( x_values )
     ax.xaxis.set_ticklabels ( labels )
-    ax.tick_params ( axis='x', rotation=45 )
+    ax.tick_params ( axis='x', rotation=25 )
     ax.grid ( axis='y', linestyle='--', linewidth=0.5, color='gray', alpha=0.5 )
     ax.grid(which='minor', axis='y', linestyle=':', linewidth=0.5, color='lightgray')
     ax.yaxis.set_major_formatter(ticker.FuncFormatter(format_power_10_ticks))
@@ -388,16 +391,16 @@ def plot_combined_frequency_distribution(combined_data, title, metric, parent_di
     if 'Size' in metric:
         ax.set_title(f'{title}: {metric} Distribution by Size')
         ax.set_xlabel("Size (B)")
-        bin_labels = [f'{convert_size ( left )} to {convert_size ( right )}' for left, right in
+        bin_labels = [f'{convert_size ( left )}-{convert_size ( right )}' for left, right in
                       zip ( bin_edges[:-1], bin_edges[1:] )]
     else:
         ax.set_title(f'{title}: {metric} Distribution by Duration')
         ax.set_xlabel("Time (us)")
-        bin_labels = [f'{convert_duration ( left )} to {convert_duration ( right )}' for left, right in
+        bin_labels = [f'{convert_duration ( left )}-{convert_duration ( right )}' for left, right in
                       zip ( bin_edges[:-1], bin_edges[1:] )]
 
 
-    ax.set_xticklabels ( bin_labels, rotation=45, ha='right' )
+    ax.set_xticklabels ( bin_labels, rotation=25, ha='right' )
     ax.set_ylabel("Frequency")
     ax.set_yscale('log', base=10)
     ax.yaxis.set_major_formatter(ticker.FuncFormatter(format_power_10_ticks))
