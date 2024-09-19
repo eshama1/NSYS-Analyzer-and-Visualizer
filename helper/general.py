@@ -278,6 +278,7 @@ def create_histogram(data, bins=10, powers_2=False, base=False, convert_bytes=Fa
 
         for sublist in hist:
             if not sublist:
+                sublist = []
                 sublist.append(0)
 
         histogram_data = {
