@@ -225,7 +225,7 @@ def plot_binned_bandwidth_distribution(combined_data, title, parent_dir):
 
     quantiles = np.linspace(0, 1, 8)
     bin_edges = np.quantile(all_sizes, quantiles)
-    fig, ax = plt.subplots(figsize=(10, 10))
+    fig, ax = plt.subplots(figsize=(10, 8))
     num_configs = len(combined_data.items())
     width_per_bin = 0.25  # adjusted width for violins
 
@@ -363,7 +363,7 @@ def plot_combined_frequency_distribution(combined_data, title, metric, parent_di
 
     quantiles = np.linspace(0, 1, num=9)
     bin_edges = np.quantile(all_values, quantiles)
-    fig, ax = plt.subplots(figsize=(10, 10))
+    fig, ax = plt.subplots(figsize=(10, 8))
     num_configs = len(combined_data.items())
     width_per_bin = 0.25
 
