@@ -57,7 +57,7 @@ def create_and_plot_k_mean_statistics(cluster_data, title, parent_dir):
         wcss_values.append ( kmeans.inertia_ )
 
     # Plot the WCSS values
-    fig, ax = plt.subplots ( figsize=(10, 8) )
+    fig, ax = plt.subplots ( figsize=(8, 6) )
     ax.plot ( range ( 1, max_clusters + 1 ), wcss_values, marker='o' )
     ax.set_title ( 'Elbow Method for Optimal k' )
     ax.set_xlabel ( 'Number of clusters (k)' )
@@ -78,7 +78,7 @@ def create_and_plot_k_mean_statistics(cluster_data, title, parent_dir):
         min_y = np.min(X[:, 1])
         min_x_log10 = np.floor(np.log10(min_x))
         min_y_log10 = np.floor(np.log10(min_y))
-        fig, ax = plt.subplots ( 1, figsize=(10, 8) )
+        fig, ax = plt.subplots ( 1, figsize=(8, 6) )
         ax.scatter ( X[:, 0], X[:, 1], c=cluster_labels, cmap='tab10', s=50, alpha=0.5 )
         ax.set_title ( 'Execution Duration K-means Clustering' )
         ax.set_xlabel ( 'Mean Execution Duration' )
@@ -121,7 +121,7 @@ def plot_combined_data(combined_data, title, metric, parent_dir, raw_provided=Fa
         logging.error ( f'\"{title}: Combined {metric}\" - Only 1 Raw Data found, No figure generated' )
         return None
 
-    fig, ax = plt.subplots ( 1, figsize=(10, 8) )
+    fig, ax = plt.subplots ( 1, figsize=(8, 6) )
     parts = ax.violinplot ( data, showmeans=True, showmedians=True )
 
     for pc in parts['bodies']:
@@ -178,7 +178,7 @@ def plot_combined_overall_bandwidth_distribution(combined_data, title, parent_di
             temp.append (bandwidth)
         data.append ( temp )
 
-    fig, ax = plt.subplots ( 1, figsize=(10, 8) )
+    fig, ax = plt.subplots ( 1, figsize=(8, 6) )
     parts = ax.violinplot ( data, showmeans=True, showmedians=True )
 
     for pc in parts['bodies']:
@@ -225,7 +225,7 @@ def plot_binned_bandwidth_distribution(combined_data, title, parent_dir):
 
     quantiles = np.linspace(0, 1, 8)
     bin_edges = np.quantile(all_sizes, quantiles)
-    fig, ax = plt.subplots(figsize=(10, 8))
+    fig, ax = plt.subplots(figsize=(8, 6))
     num_configs = len(combined_data.items())
     width_per_bin = 0.25  # adjusted width for violins
 
@@ -286,7 +286,7 @@ def plot_bandwidth_distribution(histogram_data, title, parent_dir):
     labels = histogram_data['Bin Labels']
 
     x_values = np.arange ( 1, len ( array_lists ) + 1 )
-    fig, ax = plt.subplots ( 1, figsize=(10, 8) )
+    fig, ax = plt.subplots ( 1, figsize=(8, 6) )
     parts = ax.violinplot ( array_lists, showmeans=True, showmedians=True )
 
     for pc in parts['bodies']:
@@ -329,7 +329,7 @@ def plot_frequency_distribution(histogram_data, title, xlabel, parent_dir):
     bin_array = histogram_data['Histogram']
     labels = histogram_data['Bin Labels']
 
-    fig, ax = plt.subplots ( 1, figsize=(10, 8) )
+    fig, ax = plt.subplots ( 1, figsize=(8, 6) )
     ax.bar ( range ( 1, len ( bin_array ) + 1 ), bin_array, width=1, edgecolor='black' )
 
     x_values = np.arange ( 1, len ( bin_array ) + 1 )
@@ -363,7 +363,7 @@ def plot_combined_frequency_distribution(combined_data, title, metric, parent_di
 
     quantiles = np.linspace(0, 1, num=9)
     bin_edges = np.quantile(all_values, quantiles)
-    fig, ax = plt.subplots(figsize=(10, 8))
+    fig, ax = plt.subplots(figsize=(8, 6))
     num_configs = len(combined_data.items())
     width_per_bin = 0.25
 
