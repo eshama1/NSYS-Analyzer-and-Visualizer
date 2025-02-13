@@ -1,80 +1,109 @@
 # NSYS Analyzer & Visualizer (NAV)
 
-These scripts are designed to extract and generate tables and figures from an NSYS Trace database (*sqlite*). 
-These scripts also have the ability to create comparative tables and figures when more than one database or *NAV* formatted json file are provided.
+## Introduction  
+High-performance computing (HPC) and AI workloads increasingly rely on **GPUs** for acceleration, yet **understanding performance impacts** of code changes remains challenging. **NVIDIA Nsight™ Systems (NSYS)** provides profiling tools, but lacks **efficient comparative analysis and detailed visualization** capabilities.  
 
-NOTE these scripts extract the raw data from the *sqlite* files which means the duration of extraction is relative to the size and frequency of the metrics.
-For ~1GB files expect a few minutes, for ~100GB expect a few hours. 
+**NAV (NSYS Analyzer and Visualizer)** enhances NSYS by offering **fast, automated, and insightful trace analysis**, helping developers and researchers quickly identify **performance regressions, bottlenecks, and optimizations** in GPU workloads.  
 
-## Requirements
+## Key Features  
+✔ **Faster Extraction & Visualization** – Extracts trace data **1.15–3.5× faster** than NSYS recipes  
+✔ **Comparative Analysis** – Enables **direct side-by-side performance comparisons** of multiple traces  
+✔ **Advanced Data Representations** – Generates **histograms, violin plots, and multi-trace visualizations**  
+✔ **Multi-Level Granularity** – Supports **Micro, Meso, and Macro-level** insights for deeper analysis  
+✔ **Efficient Handling of Large Traces** – Uses **parallel processing** to manage high-frequency GPU traces  
+✔ **Multiple Export Formats** – Save results in **CSV, LaTeX, and PNG** for easy reporting and integration  
+✔ **Open-Source & Extensible** – Modify and extend NAV to **add new metrics, visualizations, and analyses**  
 
-### Required Trace Flags 
- ```bash
- nsys profile --trace=cuda,mpi,ucx,nvtx 
- ```
+## Why Use NAV?  
+🔹 **Automates** performance trace analysis, reducing manual effort  
+🔹 **Uncovers hidden performance trends** that NSYS recipes may miss  
+🔹 **Improves regression testing** by providing **intuitive, side-by-side comparisons**  
+🔹 **Optimized for HPC, AI/ML, and GPU-intensive applications**  
 
-Extracting *sqlite* file from *nsys-rep* file. Alternative: If you open the nsys-rep file in NSight GUI it may generate *sqlite* file.
+---
+
+## Requirements  
+
+### Required Trace Flags  
+Run NSYS with the necessary flags for full trace capture:  
+```bash
+nsys profile --trace=cuda,mpi,ucx,nvtx 
+```
+
+### Extracting SQLite File from NSYS Report  
+Convert an `.nsys-rep` file to an `.sqlite` database for NAV:  
 ```bash
 nsys export --type sqlite <nsys.rep file>
 ```
+Alternatively, opening the `.nsys-rep` file in the Nsight GUI may automatically generate an `.sqlite` file.  
 
-### Required Python Library's 
-Please ensure that local python ENV has all the required library's 
-```python
-pip install absl_py contourpy cycler fonttools joblib kiwisolver matplotlib numpy packaging pillow pyparsing python_dateutil scikit_learn scipy six sklearn threadpoolctl
+### Required Python Libraries  
+Ensure your environment has all dependencies installed:  
+```bash
+pip install absl_py contourpy cycler fonttools joblib kiwisolver \
+matplotlib numpy packaging pillow pyparsing python_dateutil \
+scikit_learn scipy six sklearn threadpoolctl
 ```
 
-## Script Usage
+---
 
-### Generating *NAV* *json* file
-Extracting data from *.sqlite* and create tables and figures
-```python
+## Script Usage  
+
+### Generating NAV JSON Files from SQLite  
+Extract data and generate tables/figures from an `.sqlite` trace file:  
+```bash
 python3 main.py -df file.sqlite
 ```
-Extracting data from *.sqlite* without creating tables and figures (This method is useful when you want to extract data from many files first that create tables and figures after)
-```python
+Extract data **without** generating tables/figures (useful for batch processing):  
+```bash
 python3 main.py -df file.sqlite -nmo
 ```
-Extracting data from multiple *.sqlite* and create tables and figures sequentially (NOT RECOMMENDED!! VERY SLOW)
-```python
+Extract data from multiple `.sqlite` files sequentially (**not recommended due to slow performance**):  
+```bash
 python3 main.py -df "file1.sqlite file2.sqlite file3.sqlite" -mdl "Label1,Label2,Label3"
 ```
-### Recommend method to create NAV *json* files from multiple *sqlite* files
-Extracting data from multiple *.sqlite* without create tables and figures
-```python
-# Run in seperate Nodes or Jobs in parallel
-python3 main.py -df "file1.sqlite" -nmo
-python3 main.py -df "file2.sqlite" -nmo
-python3 main.py -df "file3.sqlite" -nmo
+
+### Recommended: Parallel Extraction for Multiple SQLite Files  
+Run extractions separately to speed up processing:  
+```bash
+# Execute on separate nodes or jobs in parallel
+python3 main.py -df "file1.sqlite" -nmo &
+python3 main.py -df "file2.sqlite" -nmo &
+python3 main.py -df "file3.sqlite" -nmo &
 ```
-### Generating Tables and Figures from *NAV json* file(s)
-Create tables and figures from *NAV json*
-```python
+
+### Generating Tables and Figures from NAV JSON Files  
+Process a single NAV JSON file:  
+```bash
 python3 main.py -jf file.json
 ```
-Create tables and figures from multiple *NAV json* with comparison tables and figures
-```python
+Process multiple NAV JSON files with comparative analysis:  
+```bash
 python3 main.py -jf "file1.json file2.json file3.json" -mdl "Label1,Label2,Label3"
 ```
 
-## Flags Overview
+---
 
-### General Flags
-- **output_dir** (`-o`): Name of directory to save generated NAV files and export Tables and Figures (default: ./output)
-- **multi_data_label** (`-mdl`): *(REQUIRED for multi-files)* Labels for each database/JSON file provided to distinguish in statistics. Example: (1 GPU, 2 GPU, 3 GPU). Use commas to split names, and ensure the order matches the provided files.
-- **max_workers** (`-mw`): Specifies the number of threads to split work (Defaults to CPU count if not set).
+## Flags Overview  
 
-### Extraction Flags
-- **data_file** (`-df`): Specifies the database file for extraction (sqlite).
-- **json_file** (`-jf`): Specifies the JSON file containing extracted statistics.
-- **no_kernel_metrics** (`-nkm`): If set, kernel metrics will not be exported.
-- **no_transfer_metrics** (`-ntm`): If set, transfer metrics will not be exported.
-- **no_communication_metrics** (`-ncm`): If set, communication metrics will not be exported.
-- **no_save_data** (`-nsd`): If set, metrics will not be saved to a *NAV json* file.
+### General Flags  
+- `-o, --output_dir` → Output directory for NAV files, tables, and figures *(default: ./output)*  
+- `-mdl, --multi_data_label` → *(Required for multi-file analysis)* Labels for each trace *(e.g., "1 GPU, 2 GPU, 3 GPU")*  
+- `-mw, --max_workers` → Number of threads to use *(Defaults to CPU count if unset)*  
 
-### Graphics and Table Flags
-- **no_metrics_output** (`-nmo`): If set, disables metrics export after extraction.
-- **no_compare_metrics_output** (`-ncmo`): If set, disables comparison metrics export (applicable for multi-file only).
-- **no_general_metrics_output** (`-ngmo`): If set, disables general metrics export (Kernel, Transfer, Communication).
-- **no_specific_metrics_output** (`-nsmo`): If set, disables specific metrics export (Duration, Size, Slack, Overhead, etc).
-- **no_individual_metrics_output** (`-nimo`): If set, disables individual metrics export (individual kernel, transfer, communication statistics).
+### Extraction Flags  
+- `-df, --data_file` → Specify an `.sqlite` trace file for extraction  
+- `-jf, --json_file` → Use an existing NAV `.json` file instead of extracting from `.sqlite`  
+- `-nkm, --no_kernel_metrics` → Skip exporting kernel metrics  
+- `-ntm, --no_transfer_metrics` → Skip exporting transfer metrics  
+- `-ncm, --no_communication_metrics` → Skip exporting communication metrics  
+- `-nsd, --no_save_data` → Prevent saving extracted data to a NAV JSON file  
+
+### Graphics & Table Flags  
+- `-nmo, --no_metrics_output` → Disable metrics export after extraction  
+- `-ncmo, --no_compare_metrics_output` → Disable comparison metric exports (for multi-file analysis)  
+- `-ngmo, --no_general_metrics_output` → Disable general metric exports (Kernel, Transfer, Communication)  
+- `-nsmo, --no_specific_metrics_output` → Disable specific metric exports (Duration, Size, Slack, Overhead, etc.)  
+- `-nimo, --no_individual_metrics_output` → Disable exporting individual metric details  
+
+---
