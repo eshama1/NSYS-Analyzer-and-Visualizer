@@ -73,13 +73,13 @@ python3 main.py -df "file3.sqlite" -nmo &
 ```
 
 ### Generating Tables and Figures from NAV JSON Files  
-Process a single NAV JSON file:  
+Process a single NAV file:  
 ```bash
-python3 main.py -jf file.json
+python3 main.py -jf file.nav
 ```
-Process multiple NAV JSON files with comparative analysis:  
+Process multiple NAV files with comparative analysis:  
 ```bash
-python3 main.py -jf "file1.json file2.json file3.json" -mdl "Label1,Label2,Label3"
+python3 main.py -jf "file1.nav file2.nav file3.nav" -mdl "Label1,Label2,Label3"
 ```
 
 ---
