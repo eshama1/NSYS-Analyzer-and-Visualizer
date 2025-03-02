@@ -1,4 +1,4 @@
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ProcessPoolExecutor, as_completed
 
 from absl import logging
 
@@ -158,7 +158,7 @@ def parallel_parse_transfer_data(queries_res):
     total_tasks = len ( queries_res )
     completed_tasks = 0
 
-    with ThreadPoolExecutor ( max_workers=MAX_WORKERS ) as executor:
+    with ProcessPoolExecutor ( max_workers=MAX_WORKERS ) as executor:
         futures = []
         for data in queries_res:
             future = executor.submit ( generate_transfer_stats, data )

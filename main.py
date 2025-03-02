@@ -90,9 +90,12 @@ def main(argv):
     # Convert seconds to hours, minutes, and seconds
     hours, remainder = divmod(execution_time, 3600)
     minutes, seconds = divmod(remainder, 60)
+    milliseconds = (execution_time % 1) * 1000  # Get milliseconds
 
-    # Format the time as HH:MM:SS
-    formatted_time = "{:02}:{:02}:{:02}".format(int(hours), int(minutes), int(seconds))
+    # Format the time as HH:MM:SS.sss (with milliseconds)
+    formatted_time = "{:02}:{:02}:{:02}.{:03}".format(
+        int(hours), int(minutes), int(seconds), int(milliseconds)
+    )
     logging.info("Script Execution Time: %s", formatted_time)
 
 

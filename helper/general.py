@@ -1,7 +1,7 @@
 import json
 import sqlite3
 from bisect import bisect_left, bisect_right
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ProcessPoolExecutor, as_completed
 
 import numpy as np
 from absl import logging, app
@@ -100,6 +100,8 @@ def execute_query(conn, query, params=None):
 def execute_query_in_thread(query_params, database_file):
     conn = sqlite3.connect(database_file)  # Create a new connection object in each thread
     try:
+        conn.execute("PRAGMA cache_size=-64000;")  # Increase cache size (~64MB)
+        conn.execute("PRAGMA temp_store=MEMORY;")
         result = execute_query ( conn, *query_params )
     except sqlite3.Error as error:
         print("Error reading data from SQLite table:", error)
@@ -112,7 +114,7 @@ def execute_queries_parallel(queries_with_params, database_file):
     results = []
     total_queries = len(queries_with_params)
     completed_queries = 0
-    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+    with ProcessPoolExecutor(max_workers=MAX_WORKERS) as executor:
         futures = []
         for query_params in queries_with_params:
             future = executor.submit(execute_query_in_thread, query_params, database_file)

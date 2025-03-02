@@ -1,6 +1,6 @@
 import os
 import warnings
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ProcessPoolExecutor
 
 from absl import logging
 
@@ -167,7 +167,7 @@ def find_common_keys_or_names(data_dict, kernels=False):
 
 def generate_specific_tables_and_figures(data_dict, parent_dir, combined=False):
     logging.info ( f"Starting Individual kernel/type Summary Figure and Table Generation" )
-    with ThreadPoolExecutor ( max_workers=MAX_WORKERS ) as executor:
+    with ProcessPoolExecutor ( max_workers=MAX_WORKERS ) as executor:
         futures = []
         if not combined:
             for sub_dir, sub_dict in data_dict.items ():

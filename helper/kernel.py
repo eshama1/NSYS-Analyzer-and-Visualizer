@@ -1,4 +1,4 @@
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ProcessPoolExecutor, as_completed
 
 from absl import logging
 
@@ -139,7 +139,7 @@ def parallel_parse_kernel_data(queries_res):
     total_tasks = len(queries_res)
     completed_tasks = 0
 
-    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+    with ProcessPoolExecutor(max_workers=MAX_WORKERS) as executor:
         futures = []
         for data in queries_res:
             future = executor.submit(parse_kernel_data, data)
@@ -184,7 +184,7 @@ def parallel_create_general_kernel_stats(kernel_stats):
     general_stats = {}
     tasks = ['Execution Duration', 'Launch Overhead', 'Slack']
 
-    with ThreadPoolExecutor(max_workers=len(tasks) if MAX_WORKERS > len(tasks) else MAX_WORKERS) as executor:
+    with ProcessPoolExecutor(max_workers=len(tasks) if MAX_WORKERS > len(tasks) else MAX_WORKERS) as executor:
         futures = {executor.submit(create_specific_kernel_stats, kernel_stats, task): task for task in tasks}
 
         for future in as_completed(futures):
