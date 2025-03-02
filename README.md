@@ -6,7 +6,7 @@ High-performance computing (HPC) and AI workloads increasingly rely on **GPUs** 
 **NAV (NSYS Analyzer and Visualizer)** enhances NSYS by offering **fast, automated, and insightful trace analysis**, helping developers and researchers quickly identify **performance regressions, bottlenecks, and optimizations** in GPU workloads.  
 
 ## Key Features  
-✔ **Faster Extraction & Visualization** – Extracts trace data **1.15–3.5× faster** than NSYS recipes  
+✔ **Faster Extraction & Visualization** – Extracts trace data **23.33–9.75× faster** than NSYS recipes for traces 1.2G and 12G 
 ✔ **Comparative Analysis** – Enables **direct side-by-side performance comparisons** of multiple traces  
 ✔ **Advanced Data Representations** – Generates **histograms, violin plots, and multi-trace visualizations**  
 ✔ **Multi-Level Granularity** – Supports **Micro, Meso, and Macro-level** insights for deeper analysis  
