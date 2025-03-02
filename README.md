@@ -45,6 +45,11 @@ matplotlib numpy packaging pillow pyparsing python_dateutil \
 scikit_learn scipy six sklearn threadpoolctl
 ```
 
+### **Pre-Compile Scripts for Faster Execution**  
+Before running NAV, you can **precompile** the Python scripts to speed up future executions:  
+```bash
+python -m compileall .
+```
 ---
 
 ## Script Usage  
